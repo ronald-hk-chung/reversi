@@ -1,0 +1,98 @@
+<!-- <!DOCTYPE html> -->
+<html lang="en">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="ui.js"></script>
+  <script src="reversiScript.js"></script>
+
+</head>
+
+<body>
+  <div class="w3-sidebar w3-bar-block w3-light-grey w3-card w3-animate-left" style="display:none" id="leftMenu">
+    <button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Close &times;</button>
+    <div class="w3-bar-item w3-button" onclick="p1Manual()">Manual</div>
+    <div class="w3-bar-item w3-button" onclick="showComputer1()">Computer▼</i></div>
+    <div id="computer1Choice" class="w3-hide w3-white w3-card-4">
+      <a href="#" class="w3-bar-item w3-button">random</a>
+      <a href="#" class="w3-bar-item w3-button">maxDisc</a>
+      <a href="#" class="w3-bar-item w3-button">minCanMove</a>
+    </div>
+    <a href="#" class="w3-bar-item w3-button">Link 1</a>
+  </div>
+
+  <div class="w3-sidebar w3-bar-block w3-card w3-animate-right" style="display:none;right:0;" id="rightMenu">
+    <button onclick="closeRightMenu()" class="w3-bar-item w3-button w3-large">Close &times;</button>
+    <div class="w3-bar-item w3-button" onclick="p2Manual()">Manual</div>
+    <div class="w3-bar-item w3-button" onclick="showComputer2()">Computer▼</i></div>
+    <div id="computer2Choice" class="w3-hide w3-white w3-card-4">
+      <a href="#" class="w3-bar-item w3-button">random</a>
+      <a href="#" class="w3-bar-item w3-button">maxDisc</a>W
+      <a href="#" class="w3-bar-item w3-button">minCanMove</a>
+    </div>
+    <a href="#" class="w3-bar-item w3-button">Link 1</a>
+  </div>
+
+  <div class="w3-bar w3-light-grey w3-container">
+    <button id="p1Option" class="w3-button w3-black w3-xlarge w3-left" onclick="openLeftMenu()">&#9776;</button>
+    <div id="p1Choice" class="w3-bar-item w3-left w3-large">Manual</div>
+    <button id="p2Option" class="w3-button w3-black w3-xlarge w3-right" onclick="openRightMenu()">&#9776;</button>
+    <div id="p2Choice" class="w3-bar-item w3-right w3-large">Manual</div>
+    <div id="scoreLabel" class="w3-center w3-xxlarge"></div>
+  </div>
+
+  <div class="w3-bar w3-light-grey w3-container">
+    <div id="statusLabel" class="w3-center w3-xlarge">Status...</div>
+  </div>
+
+  <!-- <div class="col-1 menu">
+    <ul>
+      <li id="resetButton">Reset</li>
+      <li id="showCanMoveButton">Show Legal Move</li>
+      <li id="autoPlayButton">Auto Play</li>
+      <li id="simulateFullGameButton">Simulate Full Game</li>
+    </ul>
+  </div> -->
+
+  <div class="container-md">
+    <div id="blackBackground" class="blackBackground">
+      <div id="discLayer"></div>
+      <div id="canMoveLayer"></div>
+    </div>
+
+    <div></div>
+    <div id="statusLabel" class="statusLabel"></div>
+
+
+    <div class="col-3">
+      <table id="summary" class="summary">
+        <p style="font-weight: bold">Summary Table</p>
+        <tr>
+          <th>Total Play</th>
+          <th>Black Win</th>
+          <th>Black Win%</th>
+          <th>White Win</th>
+          <th>White Win%</th>
+        </tr>
+        <tr>
+          <td id="totalPlay">0</td>
+          <td id="blackWin"></td>
+          <td id="blackWinP"></td>
+          <td id="whiteWin"></td>
+          <td id="whiteWinP"></td>
+        </tr>
+      </table>
+    </div>
+    <!-- </div> -->
+
+    <script>
+      $(document).ready(function () {
+        reversiStart()
+      })
+    </script>
+</body>
+
+</html>
