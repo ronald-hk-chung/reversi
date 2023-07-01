@@ -8,6 +8,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   <script src="ui.js"></script>
   <script src="reversiScript.js"></script>
+  <script src="reversiComp.js"></script>
 
 </head>
 
@@ -48,51 +49,45 @@
     <div id="statusLabel" class="w3-center w3-xlarge">Status...</div>
   </div>
 
-  <!-- <div class="col-1 menu">
-    <ul>
-      <li id="resetButton">Reset</li>
-      <li id="showCanMoveButton">Show Legal Move</li>
-      <li id="autoPlayButton">Auto Play</li>
-      <li id="simulateFullGameButton">Simulate Full Game</li>
-    </ul>
-  </div> -->
-
   <div class="container-md">
     <div id="blackBackground" class="blackBackground">
       <div id="discLayer"></div>
       <div id="canMoveLayer"></div>
     </div>
-
-    <div></div>
-    <div id="statusLabel" class="statusLabel"></div>
-
-
-    <div class="col-3">
-      <table id="summary" class="summary">
-        <p style="font-weight: bold">Summary Table</p>
-        <tr>
-          <th>Total Play</th>
-          <th>Black Win</th>
-          <th>Black Win%</th>
-          <th>White Win</th>
-          <th>White Win%</th>
-        </tr>
-        <tr>
-          <td id="totalPlay">0</td>
-          <td id="blackWin"></td>
-          <td id="blackWinP"></td>
-          <td id="whiteWin"></td>
-          <td id="whiteWinP"></td>
-        </tr>
-      </table>
+  </div>
+  <br>
+  <div class="w3-center">
+    <div class="w3-bar">
+      <button id="resetButton" class="w3-button w3-black w3-xxlarge w3-round-xxlarge">Reset</button>
+      <button id="showCanMoveButton" class="w3-button w3-black w3-xxlarge w3-round-xxlarge">Show CanMove</button>
     </div>
-    <!-- </div> -->
+  </div>
+  <div class="col-3">
+    <table id="summary" class="summary">
+      <p style="font-weight: bold">Summary Table</p>
+      <tr>
+        <th>Total Play</th>
+        <th>Black Win</th>
+        <th>Black Win%</th>
+        <th>White Win</th>
+        <th>White Win%</th>
+      </tr>
+      <tr>
+        <td id="totalPlay">0</td>
+        <td id="blackWin"></td>
+        <td id="blackWinP"></td>
+        <td id="whiteWin"></td>
+        <td id="whiteWinP"></td>
+      </tr>
+    </table>
+  </div>
+  <!-- </div> -->
 
-    <script>
-      $(document).ready(function () {
-        reversiStart()
-      })
-    </script>
+  <script>
+    $(document).ready(function () {
+      reversiStart()
+    })
+  </script>
 </body>
 
 </html>
