@@ -138,11 +138,11 @@ Game.prototype.drawCanMoveLayer = async function () {
       .addClass("canMove")
       .css({
         position: "absolute",
-        width: cellWidth,
-        height: cellWidth,
+        width: cellWidth - 2,
+        height: cellWidth - 2,
         "border-radius": "50%",
-        left: (cellWidth + gap) * canMoveArray[i].column + gap,
-        top: (cellWidth + gap) * canMoveArray[i].row + gap,
+        left: (cellWidth + gap) * canMoveArray[i].column + gap + 1,
+        top: (cellWidth + gap) * canMoveArray[i].row + gap + 1,
         "z-index": 3,
       })
       .attr(
@@ -184,11 +184,11 @@ Game.prototype.drawDisc = async function () {
           $(document.createElement("div"))
             .css({
               position: "absolute",
-              width: cellWidth,
-              height: cellWidth,
+              width: cellWidth - 2,
+              height: cellWidth - 2,
               "border-radius": "50%",
-              left: (cellWidth + gap) * column + gap,
-              top: (cellWidth + gap) * row + gap,
+              left: (cellWidth + gap) * column + gap + 1,
+              top: (cellWidth + gap) * row + gap + 1,
               "z-index": 2,
               "background-color": value == 1 ? "black" : "white",
             })
@@ -198,11 +198,11 @@ Game.prototype.drawDisc = async function () {
             .addClass("changeDisc")
             .css({
               position: "absolute",
-              width: cellWidth,
-              height: cellWidth,
+              width: cellWidth - 2,
+              height: cellWidth - 2,
               "border-radius": "50%",
-              left: (cellWidth + gap) * column + gap,
-              top: (cellWidth + gap) * row + gap,
+              left: (cellWidth + gap) * column + gap + 1,
+              top: (cellWidth + gap) * row + gap + 1,
               "z-index": 2,
               "background-color": value == 1 ? "white" : "black",
             })
@@ -261,8 +261,8 @@ function displayResult(result) {
 function switchCanMove() {
   showCanMove ? (showCanMove = false) : (showCanMove = true);
   showCanMove
-    ? $("#showCanMoveButton").text("Hide Allowed Move")
-    : $("#showCanMoveButton").text("Show Allowed Move");
+    ? $("#showCanMoveButton").text("Hide Legal Move")
+    : $("#showCanMoveButton").text("Show Legal Move");
 
   currentGame.drawCanMoveLayer();
 }
@@ -271,8 +271,8 @@ function switchShowAnalysis() {
   showAnalysis ? (showAnalysis = false) : (showAnalysis = true);
   showAnalysis ? $("#analysis").show() : $("#analysis").hide();
   showAnalysis
-    ? $("#showAnalysis").text("Hide MCT Result")
-    : $("#showAnalysis").text("Show MCT Result");
+    ? $("#showAnalysis").text("Hide MCT")
+    : $("#showAnalysis").text("Show MCT");
 }
 
 window.clickedSquare = function (row, column) {

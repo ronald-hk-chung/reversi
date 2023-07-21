@@ -373,7 +373,7 @@ Game.prototype.mcTreeSearch = function () {
         column: item.moveSeq[item.moveSeq.length - 1].column,
         n: item.n,
         t: item.t,
-        UCB: item.UCB,
+        UCB: Math.round(item.UCB * 1000) / 1000,
       };
     });
 
