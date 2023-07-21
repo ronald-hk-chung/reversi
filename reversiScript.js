@@ -1,4 +1,4 @@
-import { Game, discs } from "/reversiModel.js";
+import { Game, discs } from "./reversiModel.js";
 
 //Set Initial Setup
 let gap = 3;
@@ -96,7 +96,7 @@ Game.prototype.nextTurn = async function () {
       return;
     case 1:
       let w;
-      w = new Worker("/reversiMCTS.js", { type: "module" });
+      w = new Worker("reversiMCTS.js", { type: "module" });
       w.postMessage(currentGame);
       w.onmessage = function (event) {
         result = event.data.result;
