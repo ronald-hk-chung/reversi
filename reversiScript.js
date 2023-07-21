@@ -1,4 +1,4 @@
-import { Game, discs } from "/reversiModel.js";
+import { Game, discs } from "./reversiModel.js";
 
 //Set Initial Setup
 let gap = 3;
