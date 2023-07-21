@@ -1,4 +1,4 @@
-import { Game, discs } from "/reversiModel.js";
+import { Game, discs } from "/reversi/reversiModel.js";
 
 let gameData;
 let simGame;
