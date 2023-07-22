@@ -190,7 +190,10 @@ Game.prototype.drawDisc = async function () {
               left: (cellWidth + gap) * column + gap + 1,
               top: (cellWidth + gap) * row + gap + 1,
               "z-index": 2,
-              "background-color": value == 1 ? "black" : "white",
+              "background-image":
+                value == 1
+                  ? "radial-gradient(#333333 30%, black 70%)"
+                  : "radial-gradient(white 30%, #cccccc 70%)",
             })
             .appendTo("#discLayer");
         } else {
@@ -204,7 +207,10 @@ Game.prototype.drawDisc = async function () {
               left: (cellWidth + gap) * column + gap + 1,
               top: (cellWidth + gap) * row + gap + 1,
               "z-index": 2,
-              "background-color": value == 1 ? "white" : "black",
+              "background-image":
+                value == 1
+                  ? "radial-gradient(white 30%, #cccccc 70%)"
+                  : "radial-gradient(#333333 30%, black 70%)",
             })
             .appendTo("#discLayer");
         }
@@ -215,8 +221,10 @@ Game.prototype.drawDisc = async function () {
   if (this.moveSeq.length != 0) {
     await $(".changeDisc")
       .css(
-        "background-color",
-        this.moveSeq[this.moveSeq.length - 1].turn == 1 ? "black" : "white"
+        "background-image",
+        this.moveSeq[this.moveSeq.length - 1].turn == 1
+          ? "radial-gradient(#333333 30%, black 70%)"
+          : "radial-gradient(white 30%, #cccccc 70%)"
       )
       .fadeIn(500)
       .promise();
@@ -261,8 +269,8 @@ function displayResult(result) {
 function switchCanMove() {
   showCanMove ? (showCanMove = false) : (showCanMove = true);
   showCanMove
-    ? $("#showCanMoveButton").text("Hide Legal Move")
-    : $("#showCanMoveButton").text("Show Legal Move");
+    ? $("#showCanMoveButton").text("Hide LegalMove")
+    : $("#showCanMoveButton").text("Show LegalMove");
 
   currentGame.drawCanMoveLayer();
 }
