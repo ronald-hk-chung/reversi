@@ -2,32 +2,29 @@
 Basic implimentation of Monte Carlo Tree Search (MCTS) on Game Reversi/Othello.
 
 ## Table of Content
-* [General Info] (#general-info)
-* [Technologies] (#technologies)
-* [Setup] (#setup)
-* [About Monte Carlo Tree Search] (#monte-carlo-tree-search)
+* General Info
+* Technologies
+* Setup
+* About Monte Carlo Tree Search
 
-<a name="general-info">
+
 ## General Info
 Single Player Game Reversi/Othello.
 Allow user to choose side in teh beginning with the opponents run by basic Monte Carlo Tree Search with no extra game domain knowledge
 Response time for opponent is set at 5s with result of MCTS can be shown by Show MCTS
 
-<a name="technologies">
 ## Technologies
 Project is created with
 * Javascript
 * JQuery
 * W3C.CSS
 
-<a name="setup">
 ## Setup
 Program involves 3 files:
 reversiScript - Managing the UI of the program with the help of Javascript and JQuery
 reversiModel - Contains game model of reversi and the basic implimentation of Monte Carlo Search (details below)
 reversiMCTS - simple worker file to run MCTS (Game.mcTreeSearch()) on seperate thread
 
-<a name="monte-carlo-tree-search">
 ## About Monte Carlo Tree Search
 Plenty of excellent resources are on the internet including wikipedia [https://en.wikipedia.org/wiki/Monte_Carlo_tree_search]
 
