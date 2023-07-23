@@ -8,6 +8,7 @@ let showAnalysis = false;
 let turn = 1;
 let moveSeq = [];
 let gameStatus = 0;
+let allowedTime = 5000;
 let player1Method;
 let player2Method;
 
@@ -58,7 +59,11 @@ function reversiSetup() {
   $("#showAnalysis").click(function () {
     switchShowAnalysis();
   });
+  $("#changeAllowedTime").click(function () {
+    changeAllowedTime();
+  });
 
+  $("#spinner").hide();
   drawBoard();
   drawGreenSquares();
   currentGame.initiateMCT();
@@ -66,6 +71,13 @@ function reversiSetup() {
   $("#statusLabel").text("Please choose Black/White");
   currentGame.drawScore();
   window.currentGame = currentGame;
+}
+
+function changeAllowedTime() {
+  do {
+    allowedTime =
+      prompt("Enter MCTS response time in sec", allowedTime / 1000) * 1000;
+  } while (!Number.isInteger(allowedTime / 1000) || allowedTime == 0);
 }
 
 function reversiStart() {
@@ -97,7 +109,7 @@ Game.prototype.nextTurn = async function () {
     case 1:
       let w;
       w = new Worker("reversiMCTS.js", { type: "module" });
-      w.postMessage(currentGame);
+      w.postMessage({ allowedTime: allowedTime, gameData: currentGame });
       w.onmessage = function (event) {
         result = event.data.result;
         currentGame.mcTree = event.data.mcTree;
@@ -111,12 +123,19 @@ Game.prototype.nextTurn = async function () {
 
 Game.prototype.drawStatus = async function () {
   if (this.gameStatus == 0) {
+    (this.turn == 1 && this.player1Method != 0) ||
+    (this.turn == 2 && this.player2Method != 0)
+      ? $("#spinner").show()
+      : $("#spinner").hide();
     $("#statusLabel").text(this.turn == 1 ? "Black Turn" : "White Turn");
   } else if (this.gameStatus == 1) {
+    $("#spinner").hide();
     $("#statusLabel").text("Black Win");
   } else if (this.gameStatus == 2) {
+    $("#spinner").hide();
     $("#statusLabel").text("White Win");
   } else if (this.gameStatus == 3) {
+    $("#spinner").hide();
     $("#statusLabel").text("Draw");
   }
   return this.gameStatus;

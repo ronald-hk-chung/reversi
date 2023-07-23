@@ -3,8 +3,10 @@ import { Game, discs } from "./reversiModel.js";
 let gameData;
 let simGame;
 let result;
+let allowedTime;
 onmessage = (event) => {
-  gameData = event.data;
+  allowedTime = event.data.allowedTime;
+  gameData = event.data.gameData;
   simGame = new Game(
     gameData.turn,
     gameData.gameStatus,
@@ -15,6 +17,6 @@ onmessage = (event) => {
     gameData.moveSeq,
     gameData.mcTree
   );
-  result = simGame.mcTreeSearch();
+  result = simGame.mcTreeSearch(allowedTime);
   postMessage({ result: result, mcTree: simGame.mcTree });
 };

@@ -9,6 +9,7 @@
   <title>Reversi</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   <script type="module" src="reversiScript.js"></script>
 </head>
@@ -17,7 +18,10 @@
   <div id="main" class="w3-container">
     <div class="w3-bar w3-light-grey w3-container">
       <div id="scoreLabel" class="w3-center w3-xlarge"></div>
-      <div id="statusLabel" class="w3-center w3-large"></div>
+      <div id="statusBar" class="w3-center w3-large">
+        <i id="spinner" class="fa fa-spinner w3-spin"></i>
+        <span id="statusLabel"></span>
+      </div>
     </div>
     <div class="container-md">
       <div id="blackBackground">
@@ -26,14 +30,15 @@
       </div>
     </div>
     <br>
-    <div id="choosePlayer" class="w3-center">
+    <div id="choosePlayer" class="w3-container w3-center">
       <button id="chooseBlack" class="w3-button w3-black w3-hover-green w3-round-large">Black</button>
       <button id="chooseWhite" class="w3-button w3-lightgrey w3-border w3-hover-green w3-round-large">White</button>
     </div>
-    <div id="playerOption" class="w3-center">
-      <button id="resetButton" class="w3-button w3-round w3-black">Reset</button>
-      <button id="showCanMoveButton" class="w3-button w3-round w3-black">Hide LegalMove</button>
-      <button id="showAnalysis" class="w3-button w3-round w3-black">Show MCT</button>
+    <div id="playerOption" class="w3-container w3-center">
+      <button id="resetButton" class="w3-button w3-small w3-black">Reset</button>
+      <button id="showCanMoveButton" class="w3-button w3-small w3-black">Hide LegalMove</button>
+      <button id="showAnalysis" class="w3-button w3-small w3-black">Show MCT</button>
+      <button id="changeAllowedTime" class="w3-button w3-small w3-black">MCTS Time</button>
     </div>
     <div id="analysis" class="container-md w3-center w3-card">
       <p class="w3-center w3-border-bottom">Computer Analysis</p>

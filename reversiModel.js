@@ -333,11 +333,10 @@ function randomInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-Game.prototype.mcTreeSearch = function () {
+Game.prototype.mcTreeSearch = function (allowedTime) {
   let mcGame;
   let resultArray;
   let maxUCBIndex;
-  let allowedTime = 5000;
   let moveSeq = this.moveSeq;
   let rootNode = this.mcTree.findIndex(function (item) {
     return JSON.stringify(item.moveSeq) == JSON.stringify(moveSeq);
