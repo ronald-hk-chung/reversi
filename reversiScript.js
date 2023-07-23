@@ -62,7 +62,7 @@ function reversiSetup() {
   $("#changeAllowedTime").click(function () {
     changeAllowedTime();
   });
-
+  $("#reset").hide();
   $("#spinner").hide();
   drawBoard();
   drawGreenSquares();
@@ -82,6 +82,7 @@ function changeAllowedTime() {
 
 function reversiStart() {
   $("#choosePlayer").hide();
+  $("#reset").show();
   $("#playerOption").show();
   currentGame.drawStatus();
   currentGame.drawCanMoveLayer();
