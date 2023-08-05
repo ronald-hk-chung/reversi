@@ -10,7 +10,9 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"></script>
   <script type="module" src="reversiScript.js"></script>
 </head>
 
@@ -20,36 +22,165 @@
       <div id="scoreLabel" class="w3-center w3-xlarge"></div>
       <div id="statusBar" class="w3-center w3-large">
         <i id="spinner" class="fa fa-spinner w3-spin"></i>
+        <span id="avatarImg">
+          <img id='player1Avatar' src="" style='width:20px;height:20px;'>
+          <img id='player2Avatar' src="" style='width:20px;height:20px;'>
+        </span>
         <span id="statusLabel"></span>
       </div>
     </div>
-    <div class="container-md">
+    <div>
       <div id="blackBackground">
         <div id="discLayer"></div>
         <div id="canMoveLayer"></div>
       </div>
     </div>
     <br>
+    <div id="chooseMode" class="w3-container w3-center">
+      <button id="single" class="w3-btn w3-teal w3-round-large">Single</button>
+      <button id="double" class="w3-btn w3-teal w3-round-large">Multi Local</button>
+      <button id="multi" class="w3-btn w3-teal w3-round-large">Online</button>
+    </div>
     <div id="choosePlayer" class="w3-container w3-center">
-      <button id="chooseBlack" class="w3-button w3-black w3-hover-green w3-round-large">Black</button>
-      <button id="chooseWhite" class="w3-button w3-lightgrey w3-border w3-hover-green w3-round-large">White</button>
+      <button id="chooseBlack" class="w3-btn w3-black w3-round-large">Black</button>
+      <button id="chooseWhite" class="w3-btn w3-lightgrey w3-border w3-round-large">White</button>
     </div>
     <div id="reset" class="w3-container w3-center">
-      <button id="resetButton" class="w3-button w3-teal w3-round-large">Reset</button>
+      <button id="quitButton" class="w3-btn w3-teal w3-round-large">Quit</button>
+      <button id="resetButton" class="w3-btn w3-teal w3-round-large">Reset</button>
+      <button id="showCanMoveButton" class="w3-btn w3-teal w3-round-large">Hide
+        Move</button>
+      <button id="showAnalysis" class="w3-btn w3-teal w3-round-large">Show
+        MCT</button>
     </div>
     <br>
-    <div id="playerOption" class="w3-container w3-center">
-      <button id="showCanMoveButton" class="w3-button w3-white w3-border w3-padding-small w3-border-green w3-small">Hide
-        LegalMove</button>
-      <button id="showAnalysis" class="w3-button w3-white w3-border w3-padding-small w3-border-green w3-small">Show
-        MCT</button>
-      <button id="changeAllowedTime" class="w3-button w3-white w3-border w3-padding-small w3-border-green w3-small">MCTS
-        Time</button>
-    </div>
-    <div id="analysis" class="container-md w3-center w3-card">
-      <p class="w3-center w3-border-bottom">Computer Analysis</p>
+    <div id="mct" class="w3-center w3-card">
+      <button id="changeAllowedTime" class="w3-btn w3-teal w3-border w3-padding-small w3-border-green w3-small">Change
+        MCTS Time</button>
       <p id="resultSummary" class="w3-center w3-border-bottom w3-small"></p>
-      <table id="resultTable" class="w3-table w3-centered w3-small">
+      <table id="resultTable" class="w3-table w3-centered w3-small"></table>
+    </div>
+
+  </div>
+  <div id="commentPage" class="w3-container">
+    <div class="w3-top w3-bar w3-light-grey w3-container w3-center">
+      <div class="w3-xlarge">Leave a Comment</div>
+      <button id="post" class="w3-center w3-btn w3-teal w3-round-large">AddPost</button>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div id="comment" class="w3-container"></div>
+  </div>
+
+  </div>
+
+  <div id="gameRoom" class="w3-modal">
+    <div id="gameRoomContent" class=" w3-modal-content w3-card-4" style="width:50%">
+      <header class="w3-container w3-teal">
+        <span id="gameRoomClose" class="w3-button w3-display-topright">&times;</span>
+        <h4 id="roomHeader">Game Room</h4>
+      </header>
+      <div id="login" class="w3-container">
+        <label class="w3-text-teal"><b>Please Enter Your Name</b></label>
+        <input id="userNameInput" class="w3-input w3-border" type="text" placeholder="Name">
+        <div class="w3-center">
+          <img id="bear" src="img/bear.png" alt="bear" class="avatar w3-greyscale-max w3-card"
+            style="width:20%;margin-top:2.5%;margin-bottom:2.5%;margin-left:5%;margin-right:5%">
+          <img id="deer" src="img/deer.png" alt="deer" class="avatar w3-greyscale-max w3-card"
+            style=" width:20%;margin-top:2.5%;margin-bottom:2.5%;margin-left:5%;margin-right:5%">
+          <img id="dog" src="img/dog.png" alt="dog" class="avatar w3-greyscale-max w3-card"
+            style=" width:20%;margin-top:2.5%;margin-bottom:2.5%;margin-left:5%;margin-right:5%">
+        </div>
+        <div class="w3-center">
+          <img id="elephant" src="img/elephant.png" alt="elephant" class="avatar w3-greyscale-max w3-card"
+            style=" width:20%;margin-top:2.5%;margin-bottom:2.5%;margin-left:5%;margin-right:5%">
+          <img id="fox" src="img/fox.png" alt="fox" class="avatar w3-greyscale-max w3-card"
+            style=" width:20%;margin-top:2.5%;margin-bottom:2.5%;margin-left:5%;margin-right:5%">
+          <img id="monkey" src="img/monkey.png" alt="monkey" class="avatar w3-greyscale-max w3-card"
+            style=" width:20%;margin-top:2.5%;margin-bottom:2.5%;margin-left:5%;margin-right:5%">
+        </div>
+        <div class="w3-center">
+          <img id="ox" src="img/ox.png" alt="ox" class="avatar w3-greyscale-max w3-card"
+            style=" width:20%;margin-top:2.5%;margin-bottom:2.5%;margin-left:5%;margin-right:5%">
+          <img id="pig" src="img/pig.png" alt="pig" class="avatar w3-greyscale-max w3-card"
+            style=" width:20%;margin-top:2.5%;margin-bottom:2.5%;margin-left:5%;margin-right:5%">
+          <img id="zebra" src="img/zebra.png" alt="zebra" class="avatar w3-greyscale-max w3-card"
+            style=" width:20%;margin-top:2.5%;margin-bottom:2.5%;margin-left:5%;margin-right:5%">
+        </div>
+        <br>
+        <div class="w3-center">
+          <button id="userSubmit" class="w3-btn w3-teal">Register</button>
+        </div>
+      </div>
+      <div id="room" class="w3-container">
+        <p class="w3-border-bottom w3-small">Login as:</p>
+        <ul id="loginlist" class="w3-ul w3-card-4"></ul>
+        <br>
+        <p class="w3-border-bottom w3-small">Open Rooms: Click to Join</p>
+        <ul id="waitingRoomList" class="w3-ul w3-card-4"></ul>
+        <br>
+        <p class="w3-border-bottom w3-small">Ongoing Games:</p>
+        <ul id="playingRoomList" class="w3-ul w3-card-4"></ul>
+        <br>
+      </div>
+      <div id="addPost" class="w3-container">
+        <p class="w3-border-bottom w3-small">Login as:</p>
+        <ul id="loginlist2" class="w3-ul w3-card-4"></ul>
+        <br>
+        <label class="w3-text-teal"><b>Please Enter Your Comments</b></label>
+        <textarea id="commentInput" class="w3-input w3-border" type="text" rows="5"></textarea>
+        <br>
+        <div class="w3-center">
+          <button id="commentSubmit" class="w3-btn w3-teal">Submit</button>
+        </div>
+      </div>
+      <br>
+    </div>
+  </div>
+
+  <section id="documentation">
+    <div class="w3-top w3-bar w3-light-grey w3-container w3-center">
+      <div class="w3-xlarge">Documentation</div>
+      <div class="w3-center w3-large">App Description</div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div id="doc" class="w3-container"></div>
+  </section>
+  <br>
+  <br>
+  <br>
+  <br>
+
+  <div id="navbar" class="w3-container w3-bottom">
+    <div id="navAction" class="w3-card w3-center"></div>
+    <div class="w3-bar w3-center w3-light-grey">
+      <a id="navGame" class="w3-center w3-button">
+        <i class="fa fa-gamepad w3-xxlarge"></i>
+      </a>
+      <a id="navComment" class="w3-center w3-button">
+        <i class="fa fa-comment w3-xxlarge"></i>
+      </a>
+      <a id="navDoc" class="w3-center w3-button">
+        <i class="fa fa fa-file-text w3-xxlarge"></i>
+      </a>
+      <a id="navEmail" class="w3-center w3-button">
+        <i class="fa fa fa-envelope w3-xxlarge"></i>
+      </a>
+    </div>
+    <div class="w3-bar w3-blue">
+      <div class="w3-left">
+        <span>Comments:</span>
+        <span id="commentCount" class="w3-badge w3-teal"></span>
+      </div>
+      <div class="w3-right">
+        <span>Player:</span>
+        <span id="playerCount" class="w3-badge w3-teal">6</span>
+      </div>
     </div>
   </div>
 </body>

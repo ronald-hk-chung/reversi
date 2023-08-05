@@ -1,4 +1,15 @@
 import { Game, discs } from "./reversiModel.js";
+import {
+  logIn,
+  updateMoveSeq,
+  quitGame,
+  selectAvatar,
+  setAvatar,
+  userSubmit,
+  showGameRoom,
+  showPost,
+  postComment,
+} from "./reversiMulti.js";
 
 //Set Initial Setup
 let gap = 3;
@@ -11,35 +22,58 @@ let gameStatus = 0;
 let allowedTime = 5000;
 let player1Method;
 let player2Method;
-
-let currentGame = new Game(
-  turn,
-  gameStatus,
-  player1Method,
-  player2Method,
-  discs,
-  discs,
-  moveSeq,
-  [
-    {
-      moveSeq: [],
-      turn: 1,
-      gameStatus: 0,
-      n: 0,
-      t: 0,
-      nTotal: 0,
-      UCB: Infinity,
-      parentNode: [],
-      nodeIndex: 0,
-    },
-  ]
-);
+let player1Name = "Black";
+let player2Name = "White";
+let currentGame;
 
 $(document).ready(function () {
   reversiSetup();
+  logIn();
 });
 
 function reversiSetup() {
+  currentGame = new Game(
+    turn,
+    gameStatus,
+    player1Method,
+    player2Method,
+    discs,
+    discs,
+    moveSeq,
+    [
+      {
+        moveSeq: [],
+        turn: 1,
+        gameStatus: 0,
+        n: 0,
+        t: 0,
+        nTotal: 0,
+        UCB: Infinity,
+        parentNode: [],
+        nodeIndex: 0,
+      },
+    ]
+  );
+  //chooseMode
+  $("#single").click(function () {
+    $("#chooseMode").hide();
+    $("#choosePlayer").show();
+  });
+  $("#double").click(function () {
+    $("#chooseMode").hide();
+    currentGame.player1Method = 0;
+    currentGame.player2Method = 0;
+    $("#showAnalysis").hide();
+    reversiStart();
+  });
+  $("#multi").click(function () {
+    showGameRoom();
+  });
+  $("#post").click(function () {
+    showPost();
+  });
+
+  //choosePlayer
   $("#chooseBlack").click(function () {
     currentGame.player1Method = 0;
     currentGame.player2Method = 1;
@@ -50,6 +84,11 @@ function reversiSetup() {
     currentGame.player2Method = 0;
     reversiStart();
   });
+
+  //reset
+  $("#quitButton").click(function () {
+    quitGame();
+  });
   $("#resetButton").click(function () {
     reversiReset();
   });
@@ -59,18 +98,200 @@ function reversiSetup() {
   $("#showAnalysis").click(function () {
     switchShowAnalysis();
   });
+
+  //mct
   $("#changeAllowedTime").click(function () {
     changeAllowedTime();
   });
-  $("#reset").hide();
-  $("#spinner").hide();
+
+  //gameRoom
+  $("#gameRoomClose").click(function () {
+    $("#gameRoom").hide();
+    quitGame();
+  });
+  $(".avatar").click(function () {
+    selectAvatar(this.id);
+  });
+  $("#userSubmit").click(function () {
+    userSubmit();
+  });
+  $("#userNameInput").keypress(function (e) {
+    if (e.which == 13) {
+      $("#userSubmit").click();
+    }
+  });
+  $("#commentInput").emojioneArea({
+    pickerPosition: "bottom",
+  });
+
+  //navbar
+  $("#navGame").hover(
+    function () {
+      $("#navAction").text("Go to Game");
+    },
+    function () {
+      $("#navAction").text("");
+    }
+  );
+  $("#navComment").hover(
+    function () {
+      $("#navAction").text("Leave a Comment");
+    },
+    function () {
+      $("#navAction").text("");
+    }
+  );
+  $("#navDoc").hover(
+    function () {
+      $("#navAction").text("Documentation");
+    },
+    function () {
+      $("#navAction").text("");
+    }
+  );
+  $("#navEmail").hover(
+    function () {
+      $("#navAction").text("Email Me");
+    },
+    function () {
+      $("#navAction").text("");
+    }
+  );
+  $("#navGame").click(function () {
+    $("#main").show();
+    $("#commentPage").hide();
+    $("#documentation").hide();
+  });
+  $("#navComment").click(function () {
+    quitGame();
+    $("#main").hide();
+    $("#commentPage").show();
+    $("#documentation").hide();
+  });
+  $("#navDoc").click(function () {
+    quitGame();
+    $("#main").hide();
+    $("#commentPage").hide();
+    $("#documentation").show();
+  });
+
+  //Comment
+  $("#commentSubmit").click(function () {
+    postComment();
+  });
+
+  //prepare gameboard
   drawBoard();
+  setAvatar();
   drawGreenSquares();
   currentGame.initiateMCT();
   currentGame.drawDisc();
-  $("#statusLabel").text("Please choose Black/White");
+  $("#statusLabel").text("Reversi");
   currentGame.drawScore();
+
+  //main
+  $("#spinner").hide();
+  $("#avatarImg").hide();
+  $("#choosePlayer").hide();
+  $("#reset").hide();
+  $("#mct").hide();
+  $("#gameRoom").hide();
+  $("#commentPage").hide();
+
   window.currentGame = currentGame;
+}
+
+function reversiReset() {
+  currentGame = new Game(
+    turn,
+    gameStatus,
+    player1Method,
+    player2Method,
+    discs,
+    discs,
+    moveSeq,
+    [
+      {
+        moveSeq: [],
+        turn: 1,
+        gameStatus: 0,
+        n: 0,
+        t: 0,
+        nTotal: 0,
+        UCB: Infinity,
+        parentNode: [],
+        nodeIndex: 0,
+      },
+    ]
+  );
+
+  currentGame.initiateMCT();
+  currentGame.drawDisc();
+  $("#statusLabel").text("Reversi");
+  currentGame.drawScore();
+
+  player1Name = "Black";
+  player2Name = "White";
+
+  $("#avatarImg").hide();
+
+  $("#canMoveLayer").empty();
+  showCanMove = true;
+  $("#showCanMoveButton").text("Hide LegalMove");
+  showAnalysis = false;
+  $("#showAnalysis").text("Show MCT");
+  $("#spinner").hide();
+
+  $("#chooseMode").show();
+  $("#choosePlayer").hide();
+  $("#reset").hide();
+  $("#showAnalysis").show();
+  $("#mct").hide();
+  $("#gameRoom").hide();
+
+  window.currentGame = currentGame;
+}
+
+function reversiStart() {
+  $("#choosePlayer").hide();
+  $("#reset").show();
+  $("#quitButton").hide();
+  $("#resetButton").show();
+  currentGame.drawStatus();
+  currentGame.drawCanMoveLayer();
+  currentGame.nextTurn();
+}
+
+function reversiOnlineStart(name1, avatar1, name2, avatar2, method1, method2) {
+  $("#chooseMode").hide();
+  $("#choosePlayer").hide();
+  $("#reset").show();
+  $("#quitButton").show();
+  $("#resetButton").hide();
+  $("#mct").hide();
+  $("#gameRoom").hide();
+
+  currentGame.player1Method = method1;
+  currentGame.player2Method = method2;
+
+  player1Name = name1;
+  player2Name = name2;
+
+  currentGame.drawStatus();
+  currentGame.drawCanMoveLayer();
+  currentGame.nextTurn();
+  drawAvatar(avatar1, avatar2);
+}
+
+function drawAvatar(avatar1, avatar2) {
+  $("#player1Avatar").attr("src", "img/" + avatar1 + ".png");
+  $("#player2Avatar").attr("src", "img/" + avatar2 + ".png");
+  $("#avatarImg").show();
+}
+
+function startJoin() {
+  currentGame.player1Method = 2;
+  currentGame.player2Method = 0;
 }
 
 function changeAllowedTime() {
@@ -80,20 +301,12 @@ function changeAllowedTime() {
   } while (!Number.isInteger(allowedTime / 1000) || allowedTime == 0);
 }
 
-function reversiStart() {
-  $("#choosePlayer").hide();
-  $("#reset").show();
-  $("#playerOption").show();
-  currentGame.drawStatus();
-  currentGame.drawCanMoveLayer();
-  currentGame.nextTurn();
-}
-
 Game.prototype.clickedSquare = async function (row, column) {
   $("#canMoveLayer").empty();
   this.simulate(row, column);
-  this.mcTree = this.filterMCT();
-  if (this.gameStatus == 0) this.nextTurn();
+  if ((this.turn == 1 ? this.player1Method : this.player2Method) == 1)
+    this.mcTree = this.filterMCT();
+  this.nextTurn();
   this.drawScore();
   this.drawStatus();
   await this.drawDisc();
@@ -102,10 +315,12 @@ Game.prototype.clickedSquare = async function (row, column) {
 
 Game.prototype.nextTurn = async function () {
   let method = this.turn == 1 ? this.player1Method : this.player2Method;
+  let methodOpponent = this.turn == 1 ? this.player2Method : this.player1Method;
   let result;
 
   switch (method) {
     case 0:
+      if (methodOpponent == 2) updateMoveSeq(currentGame.moveSeq);
       return;
     case 1:
       let w;
@@ -119,22 +334,34 @@ Game.prototype.nextTurn = async function () {
         currentGame.clickedSquare(result.row, result.column);
       };
       break;
+    case 2:
+      updateMoveSeq(currentGame.moveSeq);
+      break;
   }
 };
 
 Game.prototype.drawStatus = async function () {
+  if (this.turn == 1) {
+    $("#player1Avatar").show();
+    $("#player2Avatar").hide();
+  } else {
+    $("#player2Avatar").show();
+    $("#player1Avatar").hide();
+  }
   if (this.gameStatus == 0) {
     (this.turn == 1 && this.player1Method != 0) ||
     (this.turn == 2 && this.player2Method != 0)
       ? $("#spinner").show()
       : $("#spinner").hide();
-    $("#statusLabel").text(this.turn == 1 ? "Black Turn" : "White Turn");
+    $("#statusLabel").text(
+      this.turn == 1 ? player1Name + " Turn" : player2Name + " Turn"
+    );
   } else if (this.gameStatus == 1) {
     $("#spinner").hide();
-    $("#statusLabel").text("Black Win");
+    $("#statusLabel").text(player1Name + " Win");
   } else if (this.gameStatus == 2) {
     $("#spinner").hide();
-    $("#statusLabel").text("White Win");
+    $("#statusLabel").text(player2Name + " Win");
   } else if (this.gameStatus == 3) {
     $("#spinner").hide();
     $("#statusLabel").text("Draw");
@@ -163,7 +390,7 @@ Game.prototype.drawCanMoveLayer = async function () {
         "border-radius": "50%",
         left: (cellWidth + gap) * canMoveArray[i].column + gap + 1,
         top: (cellWidth + gap) * canMoveArray[i].row + gap + 1,
-        "z-index": 3,
+        "z-index": 1,
       })
       .attr(
         "onclick",
@@ -254,15 +481,14 @@ Game.prototype.drawDisc = async function () {
 function displayResult(result) {
   $("#resultTable").empty();
   let resultKeys = Object.keys(result.result[0]);
-
   let headingString = "";
+
   for (var i = 0; i < resultKeys.length; i++) {
     headingString = headingString + "<th>" + resultKeys[i] + "</th>";
   }
   headingString = "<tr class='w3-grey'>" + headingString + "</tr>";
 
   let fullDataString = "";
-
   for (var i = 0; i < result.result.length; i++) {
     let dataString = "";
     for (var item = 0; item < resultKeys.length; item++) {
@@ -289,15 +515,15 @@ function displayResult(result) {
 function switchCanMove() {
   showCanMove ? (showCanMove = false) : (showCanMove = true);
   showCanMove
-    ? $("#showCanMoveButton").text("Hide LegalMove")
-    : $("#showCanMoveButton").text("Show LegalMove");
+    ? $("#showCanMoveButton").text("Hide Move")
+    : $("#showCanMoveButton").text("Show Move");
 
   currentGame.drawCanMoveLayer();
 }
 
 function switchShowAnalysis() {
   showAnalysis ? (showAnalysis = false) : (showAnalysis = true);
-  showAnalysis ? $("#analysis").show() : $("#analysis").hide();
+  showAnalysis ? $("#mct").show() : $("#mct").hide();
   showAnalysis
     ? $("#showAnalysis").text("Hide MCT")
     : $("#showAnalysis").text("Show MCT");
@@ -337,17 +563,29 @@ function drawBoard() {
     width: boardWidth,
     height: boardWidth,
   });
-  $("#analysis").css({
+  $("#mct").css({
     display: "block",
     position: "relative",
     "margin-left": "auto",
     "margin-right": "auto",
     width: boardWidth,
   });
-  $("#playerOption").hide();
-  $("#analysis").hide();
+  $("#comment").css({
+    display: "block",
+    position: "relative",
+    "margin-left": "auto",
+    "margin-right": "auto",
+    width: boardWidth,
+  });
+  $("#doc").css({
+    display: "block",
+    position: "relative",
+    "margin-left": "auto",
+    "margin-right": "auto",
+    width: boardWidth,
+  });
+
+  $("#gameRoomContent").width(boardWidth * 0.9);
 }
 
-function reversiReset() {
-  location.reload();
-}
+export { reversiReset, reversiOnlineStart };
