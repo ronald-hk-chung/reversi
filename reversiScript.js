@@ -244,6 +244,7 @@ function reversiReset() {
   $("#choosePlayer").hide();
   $("#reset").hide();
   $("#showAnalysis").show();
+  $("#showAnalysis").text("Show MCT");
   $("#mct").hide();
   $("#gameRoom").hide();
   $("#documentation").hide();
