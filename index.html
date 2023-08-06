@@ -17,6 +17,12 @@
 </head>
 
 <body>
+  <div id="loader" class="w3-display-container"
+    style="position:fixed;top:0;left:0;z-index:999;width:100vw;height:100vh;background:white">
+    <div class="w3-display-middle">
+      <i class="fa fa-spinner w3-spin w3-xxxlarge w3-center"></i>
+    </div>
+  </div>
   <div id="main" class="w3-container">
     <div class="w3-bar w3-light-grey w3-container">
       <div id="scoreLabel" class="w3-center w3-xlarge"></div>
@@ -323,7 +329,7 @@
   <br>
 
   <div id="navbar" class="w3-container w3-bottom">
-    <div id="navAction" class="w3-card w3-center"></div>
+    <div id="navAction" class="w3-card w3-center w3-white"></div>
     <div class="w3-bar w3-center w3-light-grey">
       <a id="navGame" class="w3-center w3-button">
         <i class="fa fa-gamepad w3-xxlarge"></i>

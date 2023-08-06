@@ -66,12 +66,12 @@ function logIn() {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       uid = user.uid;
-      console.log("UID: " + uid);
       writeUserData();
       getAdmin();
       listenPlayer();
       listenGameRoom();
       listenPost();
+      $("#loader").fadeOut();
     } else {
       console.log("User signed out");
     }
