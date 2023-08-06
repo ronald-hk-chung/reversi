@@ -197,6 +197,7 @@ function reversiSetup() {
   $("#mct").hide();
   $("#gameRoom").hide();
   $("#commentPage").hide();
+  $("#documentation").hide();
 
   window.currentGame = currentGame;
 }
@@ -233,21 +234,19 @@ function reversiReset() {
   player1Name = "Black";
   player2Name = "White";
 
-  $("#avatarImg").hide();
-
-  $("#canMoveLayer").empty();
   showCanMove = true;
-  $("#showCanMoveButton").text("Hide LegalMove");
   showAnalysis = false;
-  $("#showAnalysis").text("Show MCT");
-  $("#spinner").hide();
 
+  $("#avatarImg").hide();
+  $("#canMoveLayer").empty();
+  $("#spinner").hide();
   $("#chooseMode").show();
   $("#choosePlayer").hide();
   $("#reset").hide();
   $("#showAnalysis").show();
   $("#mct").hide();
   $("#gameRoom").hide();
+  $("#documentation").hide();
 
   window.currentGame = currentGame;
 }

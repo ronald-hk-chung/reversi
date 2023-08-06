@@ -65,7 +65,7 @@
   <div id="commentPage" class="w3-container">
     <div class="w3-top w3-bar w3-light-grey w3-container w3-center">
       <div class="w3-xlarge">Leave a Comment</div>
-      <button id="post" class="w3-center w3-btn w3-teal w3-round-large">AddPost</button>
+      <button id="post" class="w3-center w3-btn w3-small w3-teal w3-round w3-padding-small">AddPost</button>
     </div>
     <br>
     <br>
@@ -140,17 +140,183 @@
     </div>
   </div>
 
-  <section id="documentation">
+  <div id="documentation">
     <div class="w3-top w3-bar w3-light-grey w3-container w3-center">
       <div class="w3-xlarge">Documentation</div>
-      <div class="w3-center w3-large">App Description</div>
+      <div class="w3-center">
+        <a href="#Intro">Intro</a>
+        <a href="#docReversi">Reversi</a>
+        <a href="#docMcts">MCTS</a>
+        <a href="#docMcts">Apps</a>
+        <a href="#docRef">Ref</a>
+      </div>
     </div>
     <br>
     <br>
     <br>
     <br>
-    <div id="doc" class="w3-container"></div>
-  </section>
+    <div id="doc" class="w3-container">
+      <img src="img/banner.jpg" alt="banner" style="width:100%">
+      <section id="docIntro">
+        <h3>Introduction</h3>
+        <p>This App is an implementation of Othello (Reversi) game. It offers 3
+          different modes of play (Single, Local Multiplayer, Online). This article will focus on the Single Player mode
+          with the “AI” behind the computer play - Monte Carlo Tree Search.</p>
+        <br>
+      </section>
+      <section id="docReversi">
+        <h3>About Reversi</h3>
+        <p>Reversi is a strategy board game for two players, played on an 8×8 uncheckered board. It was invented in
+          1883. There are sixty-four identical game pieces called disks, which are light on one side and dark on the
+          other. For the specific game of Othello, the game begins with four disks placed in a square in the middle of
+          the grid, two facing light-side-up, two dark-side-up, so that the same-colored disks are on a diagonal.
+          Players take turns placing disks on the board with their assigned color facing up. During a play, any disks of
+          the opponent's color that are in a straight line and bounded by the disk just placed and another disk of the
+          current player's color are turned over to the current player's color. The objective of the game is to have the
+          majority of disks turned to display one's color when the last playable empty square is filled.</p>
+        <br>
+      </section>
+      <section id="docMcts">
+        <h3>About Monte Carlo Tree Search (MCTS)</h3>
+        <p>In computer science, Monte Carlo tree search (MCTS) is a heuristic search algorithm for some kinds of
+          decision processes, most notably those employed in software that plays board games. In that context MCTS is
+          used to solve the game tree. The focus of MCTS is on the analysis of the most promising moves, expanding the
+          search tree based on random sampling of the search space. The application of Monte Carlo tree search in games
+          is based on many playouts, also called roll-outs. In each playout, the game is played out to the very end by
+          selecting moves at random. The final game result of each playout is then used to weight the nodes in the game
+          tree so that better nodes are more likely to be chosen in future playouts.
+          The most basic way to use playouts is to apply the same number of playouts after each legal move of the
+          current player, then choose the move which led to the most victories. The efficiency of this method—called
+          Pure Monte Carlo Game Search—often increases with time as more playouts are assigned to the moves that have
+          frequently resulted in the current player's victory according to previous playouts. </p>
+        <p>The main difficulty in selecting child nodes is maintaining some balance between the exploitation of deep
+          variants after moves with high average win rate and the exploration of moves with few simulations. The first
+          formula for balancing exploitation and exploration in games, called UCT (Upper Confidence Bound 1 applied to
+          trees), was introduced by Levente Kocsis and Csaba Szepesvári.</p>
+        <p>Each round of Monte Carlo tree search consists of four steps:</p>
+
+        <ul>
+          <li><b>Selection: </b>In this process, the MCTS algorithm traverses the current tree from the root node using
+            a specific strategy. The strategy uses an evaluation function to optimally select nodes with the highest
+            estimated value. The main difficulty in selecting child nodes is maintaining some balance between the
+            exploitation of deep variants after moves with high average win rate and the exploration of moves with few
+            simulations. The first formula for balancing exploitation and exploration in games, called UCT (Upper
+            Confidence Bound 1 applied to trees), was introduced by Levente Kocsis and Csaba Szepesvári. MCTS uses the
+            Upper Confidence Bound (UCB) formula applied to trees as the strategy in the selection process to traverse
+            the tree. It balances the exploration-exploitation trade-off. During tree traversal, a node is selected
+            based on some parameters that return the maximum value. The parameters are characterized by
+            the formula that is typically used for this purpose is given below.
+
+            <img src="img/UCT.png" style="width:30%">
+            <div>where;</div>
+            <div>Si = value of a node i</div>
+            <div>xi = empirical mean of a node i</div>
+            <div>C = a constant</div>
+            <div>t = total number of simulations</div>
+            <div>When traversing a tree during the selection process, the child node that returns the greatest value
+              from the above equation will be one that will get selected. During traversal, once a child node is found
+              which is also a leaf node, the MCTS jumps into the expansion step.</div>
+          </li>
+          <br>
+          <li>
+            <b>Expansion: </b>In this process, a new child node is added to the tree to that node which was optimally
+            reached during the selection process.
+          </li>
+          <br>
+          <li>
+            <b>Simulation: </b>In this process, a simulation is performed by choosing moves or strategies until a result
+            or predefined state is achieved.
+          </li>
+          <br>
+          <li>
+            <b>Backpropagation: </b>After determining the value of the newly added node, the remaining tree must be
+            updated. So, the backpropagation process is performed, where it backpropagates from the new node to the root
+            node.
+            During the process, the number of simulation stored in each node is incremented. Also, if the new node’s
+            simulation results in a win, then the number of wins is also incremented.
+          </li>
+        </ul>
+        <p>The above steps can be visually understood by the diagram given below: </p>
+        <img src="img/MCTS-steps.png" style="width:100%">
+        <p>Essentially, MCTS uses Monte Carlo simulation to accumulate value estimates to guide towards highly rewarding
+          trajectories in the search tree. In other words, MCTS pays more attention to nodes that are more promising, so
+          it avoids having to brute force all possibilities which is impractical to do.
+        </p>
+        <p>Advantages of Monte Carlo Tree Search: </p>
+        <ul>
+          <li>MCTS is a simple algorithm to implement.</li>
+          <li>Monte Carlo Tree Search is a heuristic algorithm. MCTS can operate effectively without any knowledge in
+            the particular domain, apart from the rules and end conditions, and can find its own moves and learn from
+            them by playing random playouts.</li>
+          <li>The MCTS can be saved in any intermediate state and that state can be used in future use cases whenever
+            required.</li>
+          <li>MCTS supports asymmetric expansion of the search tree based on the circumstances in which it is operating.
+          </li>
+        </ul>
+        <p>Disadvantages of Monte Carlo Tree Search: </p>
+        <ul>
+          <li>As the tree growth becomes rapid after a few iterations, it requires a huge amount of memory.</li>
+          <li>There is a bit of a reliability issue with Monte Carlo Tree Search. In certain scenarios, there might be a
+            single branch or path, that might lead to loss against the opposition when implemented for those turn-based
+            games. This is mainly due to the vast amount of combinations and each of the nodes might not be visited
+            enough number of times to understand its result or outcome in the long run.</li>
+          <li>MCTS algorithm needs a huge number of iterations to be able to effectively decide the most efficient path.
+            So, there is a bit of a speed issue there.</li>
+        </ul>
+        <br>
+      </section>
+      <section id="docSpecific">
+        <h3>App Specific Implimentation</h3>
+        <p>This App is mostly written in JavaScript. No specific game domain knowledge has been applied in the algorithm
+          in order to show the effective-ness in a pure Monte Carlo Tree Search. Allowed Time is the only variable in
+          the MCTS process to specify the time allowed for search to run. In order to increase the effective-ness in
+          every MCTS run, previous node/tree results has been processed and re-used. Web-worker is used in
+          order to seperate threads on MCTS from the main thread to improve speed of calculation and user experience.
+        </p>
+        <p>Online Multiplayer is implimented with the help of RealTime Database provided by Firebase. No specific login
+          detail is required during online multiplayer session</p>
+        <p>Below is the Github repository for reference:</p>
+        <a href="https://github.com/ronald-hk-chung/reversi"
+          target="_blank">https://github.com/ronald-hk-chung/reversi</a>
+        <br>
+      </section>
+      <br>
+      <section id="docRef">
+        <h3>Useful Links and References</h3>
+        <ul>
+          <li>Reference on Monte Carlo Tree Search
+            <ul>
+              <li><a href="https://en.wikipedia.org/wiki/Monte_Carlo_tree_search"
+                  target="_blank">https://en.wikipedia.org/wiki/Monte_Carlo_tree_search</a>
+              <li><a href="https://www.geeksforgeeks.org/ml-monte-carlo-tree-search-mcts"
+                  target="_blank">https://www.geeksforgeeks.org/ml-monte-carlo-tree-search-mcts</a></li>
+              <li><a href="https://medium.com/@quasimik/monte-carlo-tree-search-applied-to-letterpress-34f41c86e238"
+                  target="_blank">https://medium.com/@quasimik/monte-carlo-tree-search-applied-to-letterpress-34f41c86e238</a>
+              </li>
+              <li><a href="https://medium.com/@pedrohbtp/ai-monte-carlo-tree-search-mcts-49607046b204"
+                  target="_blank">https://medium.com/@pedrohbtp/ai-monte-carlo-tree-search-mcts-49607046b204</a></li>
+            </ul>
+          </li>
+          <br>
+          <li>Reference on Web Development
+            <ul>
+              <li><a href="https://www.w3schools.com/" target="_blank">https://www.w3schools.com/</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/"
+                  target="_blank">https://developer.mozilla.org/en-US/</a></li>
+              <li><a href="https://firebase.google.com/" target="_blank">https://firebase.google.com/</a></li>
+            </ul>
+          </li>
+          <br>
+          <li>Other Useful Reference
+            <ul>
+              <li><a href="http://www.freepik.com" target="_blank">http://www.freepik.com</a></li>
+              <li><a href="https://fontawesome.com/icons" target="_blank">https://fontawesome.com/icons</a></li>
+            </ul>
+          </li>
+          <br>
+      </section>
+    </div>
+  </div>
   <br>
   <br>
   <br>
@@ -168,7 +334,7 @@
       <a id="navDoc" class="w3-center w3-button">
         <i class="fa fa fa-file-text w3-xxlarge"></i>
       </a>
-      <a id="navEmail" class="w3-center w3-button">
+      <a href="mailto:hoi.k.chung@gmail.com" id="navEmail" class="w3-center w3-button">
         <i class="fa fa fa-envelope w3-xxlarge"></i>
       </a>
     </div>

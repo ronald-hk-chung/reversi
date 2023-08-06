@@ -326,17 +326,17 @@ function updatePost(data) {
       "</p>" +
       '<p id="text-' +
       Object.keys(data)[i] +
-      '" class="w3-margin w3-section w3-cursive"></p>' +
+      '" class="w3-margin w3-section"></p>' +
       (isNew
         ? '<div class="w3-border-grey w3-display-topright">' +
           '<button refPost="' +
           Object.keys(data)[i] +
-          '" class="w3-button w3-tiny replyBtn">Reply</button>' +
+          '" class="w3-button w3-tiny w3-padding-small replyBtn">Reply</button>' +
           '<button id="showComment-' +
           Object.keys(data)[i] +
           '" refPost="' +
           Object.keys(data)[i] +
-          '" class="w3-button w3-tiny expandBtn">Show Comment</button>' +
+          '" class="w3-button w3-tiny w3-padding-small expandBtn">Show</button>' +
           '<span id="replyCount-' +
           Object.keys(data)[i] +
           '" class="w3-badge">0</span>' +
@@ -384,14 +384,14 @@ function expandReply(id) {
     if (expandState.findIndex((e) => e == id) == -1) {
       expandState.push(id);
       $("#reply-" + id).slideDown();
-      $("#showComment-" + id).text("Hide Comment");
+      $("#showComment-" + id).text("Hide");
     } else {
       expandState.splice(
         expandState.findIndex((e) => e == id),
         1
       );
       $("#reply-" + id).slideUp();
-      $("#showComment-" + id).text("Show Comment");
+      $("#showComment-" + id).text("Show");
     }
   }
 }
