@@ -78,7 +78,7 @@ Game.prototype.canMove = function () {
 
 Game.prototype.flipDiscs = function (selectedRow, selectedColumn) {
   let affectedDiscs = this.getAffectedDiscs(selectedRow, selectedColumn);
-  for (var i = 0; i < affectedDiscs.length; i++) {
+  for (let i = 0; i < affectedDiscs.length; i++) {
     var spot = affectedDiscs[i];
     if (this.discs[spot.row][spot.column] == 1) {
       this.discs[spot.row][spot.column] = 2;
@@ -100,9 +100,10 @@ Game.prototype.canClickSpot = function (row, column) {
 
 Game.prototype.findCanMove = function () {
   let canMoveArray = [];
-  for (var row = 0; row < 8; row++) {
-    for (var column = 0; column < 8; column++) {
-      var value = this.discs[row][column];
+  let value;
+  for (let row = 0; row < 8; row++) {
+    for (let column = 0; column < 8; column++) {
+      value = this.discs[row][column];
       if (value == 0 && this.canClickSpot(row, column)) {
         canMoveArray.push({ row: row, column: column });
       }
@@ -112,11 +113,12 @@ Game.prototype.findCanMove = function () {
 };
 
 Game.prototype.countScore = function () {
-  var blackCount = 0;
-  var whiteCount = 0;
-  for (var row = 0; row < 8; row++) {
-    for (var column = 0; column < 8; column++) {
-      var value = this.discs[row][column];
+  let blackCount = 0;
+  let whiteCount = 0;
+  let value;
+  for (let row = 0; row < 8; row++) {
+    for (let column = 0; column < 8; column++) {
+      value = this.discs[row][column];
       if (value == 1) blackCount += 1;
       else if (value == 2) whiteCount += 1;
     }
@@ -176,7 +178,6 @@ Game.prototype.getAffectedDiscs = function (row, column) {
 
 Game.prototype.expandChild = function (maxUCBIndex) {
   let mcTreeExpansion;
-  let expandedGame;
   let simGame = this.cloneGame(this.mcTree[maxUCBIndex].moveSeq);
   let canMoveArray = simGame.findCanMove();
   let mcTreeLength = this.mcTree.length;
@@ -203,7 +204,6 @@ Game.prototype.expandChild = function (maxUCBIndex) {
 
 Game.prototype.initiateMCT = function (nodeIndex = 0) {
   let mcTreeExpansion;
-  let simGame;
   let canMoveArray = this.findCanMove();
   for (let i = 0; i < canMoveArray.length; i++) {
     mcTreeExpansion = {
@@ -268,11 +268,11 @@ Game.prototype.filterMCT = function () {
   return mcTreeNew;
 };
 
-Game.prototype.selectNode = function (rootNode) {
+Game.prototype.selectNode = function () {
   let mcTreeSD;
-  let maxUCB = -Infinity;
-  let maxUCBIndex = this.mcTree[rootNode].nodeIndex;
-  let focusNode = rootNode;
+  let maxUCB;
+  let maxUCBIndex = 0;
+  let focusNode = 0;
   let reachLeaf = false;
   while (!reachLeaf || isFinite(maxUCB)) {
     maxUCB = -Infinity;
@@ -295,8 +295,8 @@ Game.prototype.selectNode = function (rootNode) {
   return maxUCBIndex;
 };
 
-Game.prototype.backPropagate = function (maxUCBIndex, rootNode, gameStatus) {
-  for (let i = rootNode; i < this.mcTree.length; i++) {
+Game.prototype.backPropagate = function (maxUCBIndex, gameStatus) {
+  for (let i = 0; i < this.mcTree.length; i++) {
     if (
       this.mcTree[i].nodeIndex == maxUCBIndex ||
       this.mcTree[maxUCBIndex].parentNode.includes(this.mcTree[i].nodeIndex)
@@ -311,7 +311,7 @@ Game.prototype.backPropagate = function (maxUCBIndex, rootNode, gameStatus) {
       : (this.mcTree[i].UCB =
           this.mcTree[i].t / this.mcTree[i].n +
           Math.sqrt(
-            (2 * Math.log(this.mcTree[rootNode].nTotal + 1)) / this.mcTree[i].n
+            (2 * Math.log(this.mcTree[0].nTotal + 1)) / this.mcTree[i].n
           ));
   }
 };
@@ -337,15 +337,11 @@ Game.prototype.mcTreeSearch = function (allowedTime) {
   let mcGame;
   let resultArray;
   let maxUCBIndex;
-  let moveSeq = this.moveSeq;
-  let rootNode = this.mcTree.findIndex(function (item) {
-    return JSON.stringify(item.moveSeq) == JSON.stringify(moveSeq);
-  });
 
   let startTime = Date.now();
   while (Date.now() - startTime < allowedTime) {
     //Selection
-    maxUCBIndex = this.selectNode(rootNode);
+    maxUCBIndex = this.selectNode();
 
     //Expansion
     if (isFinite(this.mcTree[maxUCBIndex].UCB))
@@ -356,12 +352,12 @@ Game.prototype.mcTreeSearch = function (allowedTime) {
     mcGame.simulateFull();
 
     //Backpropagation
-    this.backPropagate(maxUCBIndex, rootNode, mcGame.gameStatus);
+    this.backPropagate(maxUCBIndex, mcGame.gameStatus);
   }
 
   resultArray = this.mcTree
     .filter(function (item) {
-      return item.parentNode[item.parentNode.length - 1] == rootNode;
+      return item.parentNode[item.parentNode.length - 1] == 0;
     })
     .sort(function (a, b) {
       return b.n - a.n;
@@ -380,7 +376,7 @@ Game.prototype.mcTreeSearch = function (allowedTime) {
     row: resultArray[0].row,
     column: resultArray[0].column,
     result: resultArray,
-    nodeVisited: this.mcTree[rootNode].nTotal,
+    nodeVisited: this.mcTree[0].nTotal,
     timeCalculated: Date.now() - startTime,
   };
 };
