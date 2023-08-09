@@ -20,6 +20,7 @@ let turn = 1;
 let moveSeq = [];
 let gameStatus = 0;
 let allowedTime = 5000;
+let UCBConstant = 2;
 let player1Method;
 let player2Method;
 let player1Name = "Black";
@@ -102,6 +103,10 @@ function reversiSetup() {
   //mct
   $("#changeAllowedTime").click(function () {
     changeAllowedTime();
+  });
+
+  $("#changeUCBConstant").click(function () {
+    changeUCBConstant();
   });
 
   //gameRoom
@@ -301,6 +306,12 @@ function changeAllowedTime() {
   } while (!Number.isInteger(allowedTime / 1000) || allowedTime == 0);
 }
 
+function changeUCBConstant() {
+  do {
+    UCBConstant = prompt("Enter UCBConstant", UCBConstant);
+  } while (Number.isNaN(UCBConstant));
+}
+
 Game.prototype.clickedSquare = async function (row, column) {
   $("#canMoveLayer").empty();
   this.simulate(row, column);
@@ -325,7 +336,11 @@ Game.prototype.nextTurn = async function () {
     case 1:
       let w;
       w = new Worker("reversiMCTS.js", { type: "module" });
-      w.postMessage({ allowedTime: allowedTime, gameData: currentGame });
+      w.postMessage({
+        allowedTime: allowedTime,
+        UCBConstant: UCBConstant,
+        gameData: currentGame,
+      });
       w.onmessage = function (event) {
         result = event.data.result;
         currentGame.mcTree = event.data.mcTree;

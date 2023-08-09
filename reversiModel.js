@@ -295,7 +295,7 @@ Game.prototype.selectNode = function () {
   return maxUCBIndex;
 };
 
-Game.prototype.backPropagate = function (maxUCBIndex, gameStatus) {
+Game.prototype.backPropagate = function (maxUCBIndex, UCBConstant, gameStatus) {
   for (let i = 0; i < this.mcTree.length; i++) {
     if (
       this.mcTree[i].nodeIndex == maxUCBIndex ||
@@ -311,7 +311,8 @@ Game.prototype.backPropagate = function (maxUCBIndex, gameStatus) {
       : (this.mcTree[i].UCB =
           this.mcTree[i].t / this.mcTree[i].n +
           Math.sqrt(
-            (2 * Math.log(this.mcTree[0].nTotal + 1)) / this.mcTree[i].n
+            (UCBConstant * Math.log(this.mcTree[0].nTotal + 1)) /
+              this.mcTree[i].n
           ));
   }
 };
@@ -333,7 +334,7 @@ function randomInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-Game.prototype.mcTreeSearch = function (allowedTime) {
+Game.prototype.mcTreeSearch = function (allowedTime, UCBConstant) {
   let mcGame;
   let resultArray;
   let maxUCBIndex;
@@ -352,7 +353,7 @@ Game.prototype.mcTreeSearch = function (allowedTime) {
     mcGame.simulateFull();
 
     //Backpropagation
-    this.backPropagate(maxUCBIndex, mcGame.gameStatus);
+    this.backPropagate(maxUCBIndex, UCBConstant, mcGame.gameStatus);
   }
 
   resultArray = this.mcTree

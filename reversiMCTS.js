@@ -4,8 +4,10 @@ let gameData;
 let simGame;
 let result;
 let allowedTime;
+let UCBConstant;
 onmessage = (event) => {
   allowedTime = event.data.allowedTime;
+  UCBConstant = event.data.UCBConstant;
   gameData = event.data.gameData;
   simGame = new Game(
     gameData.turn,
@@ -17,6 +19,6 @@ onmessage = (event) => {
     gameData.moveSeq,
     gameData.mcTree
   );
-  result = simGame.mcTreeSearch(allowedTime);
+  result = simGame.mcTreeSearch(allowedTime, UCBConstant);
   postMessage({ result: result, mcTree: simGame.mcTree });
 };
