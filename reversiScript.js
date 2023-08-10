@@ -309,7 +309,7 @@ function changeAllowedTime() {
 function changeUCBConstant() {
   do {
     UCBConstant = prompt("Enter UCBConstant", UCBConstant);
-  } while (Number.isNaN(UCBConstant));
+  } while (isNaN(UCBConstant));
 }
 
 Game.prototype.clickedSquare = async function (row, column) {
