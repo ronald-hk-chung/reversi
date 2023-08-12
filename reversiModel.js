@@ -176,32 +176,6 @@ Game.prototype.getAffectedDiscs = function (row, column) {
   return affectedDiscs;
 };
 
-Game.prototype.expandChild = function (maxUCBIndex) {
-  let mcTreeExpansion;
-  let simGame = this.cloneGame(this.mcTree[maxUCBIndex].moveSeq);
-  let canMoveArray = simGame.findCanMove();
-  let mcTreeLength = this.mcTree.length;
-  for (let i = 0; i < canMoveArray.length; i++) {
-    mcTreeExpansion = {
-      moveSeq: simGame.moveSeq.concat({
-        row: canMoveArray[i].row,
-        column: canMoveArray[i].column,
-        turn: simGame.turn,
-        method: 1,
-      }),
-      turn: simGame.turn,
-      n: 0,
-      t: 0,
-      nTotal: 0,
-      UCB: Infinity,
-      parentNode: this.mcTree[maxUCBIndex].parentNode.concat(maxUCBIndex),
-      nodeIndex: this.mcTree.length,
-    };
-    this.mcTree.push(mcTreeExpansion);
-  }
-  return mcTreeLength + randomInteger(0, canMoveArray.length) - 1;
-};
-
 Game.prototype.initiateMCT = function (nodeIndex = 0) {
   let mcTreeExpansion;
   let canMoveArray = this.findCanMove();
@@ -284,7 +258,7 @@ Game.prototype.selectNode = function () {
         if (mcTreeSD[i].UCB > maxUCB) {
           maxUCB = mcTreeSD[i].UCB;
           maxUCBIndex = mcTreeSD[i].nodeIndex;
-          if (!isFinite(maxUCB)) break;
+          if (!isFinite(maxUCB)) reachLeaf = true;
         }
       }
       focusNode = maxUCBIndex;
@@ -293,6 +267,32 @@ Game.prototype.selectNode = function () {
     }
   }
   return maxUCBIndex;
+};
+
+Game.prototype.expandChild = function (maxUCBIndex) {
+  let mcTreeExpansion;
+  let simGame = this.cloneGame(this.mcTree[maxUCBIndex].moveSeq);
+  let canMoveArray = simGame.findCanMove();
+  let mcTreeLength = this.mcTree.length;
+  for (let i = 0; i < canMoveArray.length; i++) {
+    mcTreeExpansion = {
+      moveSeq: simGame.moveSeq.concat({
+        row: canMoveArray[i].row,
+        column: canMoveArray[i].column,
+        turn: simGame.turn,
+        method: 1,
+      }),
+      turn: simGame.turn,
+      n: 0,
+      t: 0,
+      nTotal: 0,
+      UCB: Infinity,
+      parentNode: this.mcTree[maxUCBIndex].parentNode.concat(maxUCBIndex),
+      nodeIndex: this.mcTree.length,
+    };
+    this.mcTree.push(mcTreeExpansion);
+  }
+  return mcTreeLength + randomInteger(0, canMoveArray.length) - 1;
 };
 
 Game.prototype.backPropagate = function (maxUCBIndex, UCBConstant, gameStatus) {
